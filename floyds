@@ -1,0 +1,57 @@
+#include<stdio.h>
+#define nv 4
+#define INF 999
+void printmatrix(int matrix[][nv]);
+void floydwarshall(int graph[][nv]){
+    int matrix[nv][nv];
+    for (int i = 0; i < nv; i++)
+    {
+        for (int j = 0; j < nv; j++)
+        {
+            matrix[i][j]=graph[i][j];
+        }
+        
+    }
+    for (int k = 0; k < nv; k++)
+    {
+        for (int i = 0; i < nv; i++)
+        {
+            for (int j = 0; j < nv; j++)
+            {
+                if (matrix[i][k]+matrix[k][j]<matrix[i][j])
+                {
+                    matrix[i][j]=matrix[i][k]+matrix[k][j];
+                }
+                
+            }
+            
+        }
+        
+    }
+   printmatrix(matrix); 
+    
+}
+void printmatrix(int matrix[][nv]){
+    printf("All pairs shortest path is \n");
+    for (int i = 0; i < nv; i++)
+    {
+        for (int j = 0; j < nv; j++)
+        {
+            if (matrix[i][j]==INF)
+            {
+                printf("%4s","INF");
+            }
+            else
+            {
+                printf("%4d",matrix[i][j]);
+            }
+            
+        }
+        printf("\n");
+    }
+}
+int main(){
+    int graph[nv][nv]={{INF,1,4,6},{INF,INF,7,4},{2,INF,INF,3},{INF,INF,INF,INF}};
+    floydwarshall(graph);
+    return 0;
+}
