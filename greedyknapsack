@@ -1,0 +1,78 @@
+#include<stdio.h>
+
+float knapsack(float w[],float p[],float r[],int n,float capacity,int isDiscrete){
+    int i;
+    float totalValue = 0;
+    if (isDiscrete)
+    {
+        for ( i = 0; i < n; i++)
+        {
+            if (w[i]<capacity)
+            {
+                totalValue += p[i];
+                capacity -= w[i];
+            }
+            
+        }
+        
+    }
+    else
+    {
+        for ( i = 0; i < n && w[i] < capacity; i++)
+        {
+            totalValue += p[i];
+            capacity -= w[i];
+        }
+        if (i<n)
+        {
+            totalValue += r[i]*capacity;
+        }
+        
+        
+    }
+    return totalValue;
+    
+}
+int main(){
+    float w[50],p[50],r[50],temp,capacity;
+    int n;
+    printf("enter the number of items:");
+    scanf("%d",&n);
+    for (int i = 0; i < n; i++)
+    {
+        printf("enter weight and profit for item [%d]:",i+1);
+        scanf("%f%f",&w[i],&p[i]);
+    }
+    printf("enter the capacitu of knapsack:");
+    scanf("%f",&capacity);
+    for(int i=0;i<n;i++)
+        r[i]=p[i]/w[i];
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i+1; j < n; j++)
+        {
+            if (r[i]<r[j])
+            {
+                temp=r[j];
+                r[j]=r[i];
+                r[i]=temp;
+
+                temp=p[j];
+                p[j]=p[i];
+                p[i]=temp;
+
+                temp=w[j];
+                w[j]=w[i];
+                w[i]=temp;
+            }
+            
+        }
+        
+    }
+    printf("\n Discrete knapscak problem using greedy algorithm:\n");
+    printf("\t the maximum value is [Discrete]:%f\n",knapsack(w,p,r,n,capacity,1));
+    printf("\n continous knapscak problem using greedy algorithm:\n");
+    printf("\t the maximum value is [continous]:%f\n",knapsack(w,p,r,n,capacity,0));
+    return 0;
+    
+}
