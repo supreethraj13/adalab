@@ -1,0 +1,71 @@
+#include<stdio.h>
+#include<limits.h>
+#define MAX 20
+
+int minkey(int key[],int mstset[],int vertices){
+    int min=INT_MAX,minindex;
+    for (int v = 0; v < vertices; v++)
+    {
+        if(!mstset[v]&&key[v]<min){
+            min=key[v];
+            minindex=v;
+        }
+    }
+    return minindex;
+}
+void printmst(int parent[],int graph[MAX][MAX],int vertices){
+    printf("Edge\tWeight\n");
+    for (int i = 1; i < vertices; i++)
+    {
+        printf("%d-%d\t%d\n",parent[i],i,graph[i][parent[i]]);
+    }
+    
+}
+void primmst(int graph[MAX][MAX],int vertices){
+    int parent[MAX];
+    int key[MAX];
+    int mstset[MAX];
+    for (int i = 0; i < vertices; i++)
+    {
+        key[i]=INT_MAX;
+        mstset[i]=0;
+
+    }
+    key[0]=0;
+    parent[0]=-1;
+    for (int count = 0; count < vertices-1; count++)
+    {
+        int u=minkey(key,mstset,vertices);
+        mstset[u]=1;
+        for (int v = 0; v < vertices; v++)
+        {
+            if (graph[u][v] && !mstset[v] && graph[u][v]<key[v])
+            {
+                parent[v]=u;
+                key[v]=graph[u][v];
+            }
+            
+        }
+        
+    }
+    
+    printmst(parent,graph,vertices);
+}
+int main(){
+    int vertices;
+    printf("enter the number of vertices:");
+    scanf("%d",&vertices);
+    int graph[MAX][MAX];
+    printf("input the adjacency matrix for the graph:\n");
+    for (int i = 0; i < vertices; i++)
+    {
+        for (int j = 0; j < vertices; j++)
+        {
+            scanf("%d",&graph[i][j]);
+        }
+        
+    }
+    primmst(graph,vertices);
+    return 0;
+    
+}
